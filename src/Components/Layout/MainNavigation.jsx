@@ -17,7 +17,7 @@ const MainNavigation=()=>{
                 <ul className={classes.list}>
                     <li>Home</li>
                     <li>About</li>
-                    <li><button onClick={logoutHandler}>logout</button></li>
+                    {authCtx.isLoggedIn && <button className={classes.button} onClick={logoutHandler}>logout</button>}
                 </ul>
             </div>
         </nav>

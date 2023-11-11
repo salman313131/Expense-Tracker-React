@@ -48,6 +48,7 @@ const LoginForm=()=>{
                 <label>Password</label>
                 <input type='password' ref={password}></input>
             </div>
+            <Link to='/forgot'>Forgot Password</Link>
             <button className={classes.button}>LogIn</button>
             <Link to='/signup'>
                 <p>New User, click to Sign Up</p>

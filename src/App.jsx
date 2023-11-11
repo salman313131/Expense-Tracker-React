@@ -4,6 +4,7 @@ import UpdateProfile from './Components/Forms/UpdateProfile'
 import Layout from './Components/Layout/Layout'
 import { Switch, Route, Redirect } from 'react-router-dom'
 import AuthContext from './Store/authContext'
+import ForgotPasword from './Components/Forms/ForgotPassword'
 import { useContext } from 'react'
 function App() {
   const authCtx = useContext(AuthContext)
@@ -19,6 +20,9 @@ function App() {
       {authCtx.isLoggedIn && <Route path='/update'>
         <UpdateProfile />
       </Route>}
+      <Route path='/forgot'>
+        <ForgotPasword />
+      </Route>
       <Route path='*'>
         <Redirect to='/login'/>
       </Route>
