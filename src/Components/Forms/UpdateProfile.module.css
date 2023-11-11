@@ -1,4 +1,52 @@
 .form{
     display: flex;
-    
+    flex-direction: column;
+    width: fit-content; 
+    margin-left: 330px; 
+    margin-top: 30px;
+}
+.forminput{
+    display: flex;
+    flex-direction: row;
+}
+.from h1{
+    align-content: center;
+}
+.button {
+    border-radius: 8px;
+    border: 1px solid transparent;
+    padding: 0.6em 1.2em;
+    font-size: 1em;
+    font-weight: 500;
+    font-family: inherit;
+    background-color: #ad4444;
+    cursor: pointer;
+    transition: border-color 0.25s;
+    margin-top: 10px;
+}
+
+.button:hover {
+    border-color: #646cff;
+}
+
+.button:focus,
+.button:focus-visible {
+    outline: 4px auto -webkit-focus-ring-color;
+}
+.formdiv {
+    padding: 10px 20px;
+    width: 220px;
+}
+
+.formdiv input {
+    width: 220px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.formdiv label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
 }
