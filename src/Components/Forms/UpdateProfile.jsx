@@ -34,6 +34,17 @@ const UpdateProfile=()=>{
             console.log(error)
         }
     }
+    const verifyEmailHandler=async ()=>{
+        const verifyData=JSON.stringify({
+            requestType: "VERIFY_EMAIL",
+            idToken: authCtx.token
+        })
+        try {
+            const veryRes = await axios.post('https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyC-zo3yd0OzHqIhJeZs8KguG4hJI7-0_AM',verifyData,{headers})
+        } catch (error) {
+            console.log(error)
+        }
+    }
     useEffect(()=>{
         async function fetchData(){
         try {
@@ -42,9 +53,9 @@ const UpdateProfile=()=>{
             })
             const resData = await axios.post('https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyC-zo3yd0OzHqIhJeZs8KguG4hJI7-0_AM',dataSend,{headers})
             if(resData.data.users[0]?.displayName && resData.data.users[0]?.photoUrl){
-                setClickUpdate(true)
                 name.current.value=resData.data.users[0].displayName;
                 photoUrl.current.value=resData.data.users[0].photoUrl;
+                setClickUpdate(true)
             }
         } catch (error) {
             console.log(error)
@@ -54,6 +65,7 @@ const UpdateProfile=()=>{
     return(
         <>
             {!clickUpdate && <p>Click to Update profile<button onClick={clickHandler}>Complete now</button></p>}
+            <button className={classes.button} onClick={verifyEmailHandler}>Verify Email</button>
             {clickUpdate && <form className={classes.form} onSubmit={submitHandler}>
                 <h1>Update Profile</h1>
                 <div className={classes.forminput}>
