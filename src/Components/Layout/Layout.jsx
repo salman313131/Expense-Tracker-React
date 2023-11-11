@@ -1,6 +1,9 @@
-const Layout=()=>{
+import MainNavigation from "./MainNavigation"
+const Layout=(props)=>{
     return(
         <>
+        <MainNavigation />
+        <main>{props.children}</main>
         </>
     )
 }

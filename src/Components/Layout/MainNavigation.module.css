@@ -1,0 +1,18 @@
+.navbar{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid black;
+}
+.navbar h2{
+    margin-left: 40px;
+}
+.list{
+    display: flex;
+    flex-direction: row;
+    margin-right: 40px;
+}
+.list li{
+    padding: 0 15px;
+    list-style: none;
+}

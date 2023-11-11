@@ -7,6 +7,7 @@ const UpdateProfile=()=>{
     const photoUrl=useRef()
     const authCtx = useContext(AuthContext)
     const [clickUpdate,setClickUpdate] = useState(false)
+    const [emailVerify,setEmailVerify] = useState(false)
     const clickHandler=()=>{
         setClickUpdate(true)
     }
@@ -40,7 +41,8 @@ const UpdateProfile=()=>{
             idToken: authCtx.token
         })
         try {
-            const veryRes = await axios.post('https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyC-zo3yd0OzHqIhJeZs8KguG4hJI7-0_AM',verifyData,{headers})
+            await axios.post('https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyC-zo3yd0OzHqIhJeZs8KguG4hJI7-0_AM',verifyData,{headers})
+            setEmailVerify(true)
         } catch (error) {
             console.log(error)
         }
@@ -52,10 +54,13 @@ const UpdateProfile=()=>{
                 idToken: authCtx.token
             })
             const resData = await axios.post('https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyC-zo3yd0OzHqIhJeZs8KguG4hJI7-0_AM',dataSend,{headers})
+            console.log(resData)
             if(resData.data.users[0]?.displayName && resData.data.users[0]?.photoUrl){
-                name.current.value=resData.data.users[0].displayName;
-                photoUrl.current.value=resData.data.users[0].photoUrl;
                 setClickUpdate(true)
+                console.log(resData.data.users[0].displayName,resData.data.users[0].photoUrl);
+            }
+            if(resData.data.users[0].emailVerified){
+                setEmailVerify(true)
             }
         } catch (error) {
             console.log(error)
@@ -65,7 +70,7 @@ const UpdateProfile=()=>{
     return(
         <>
             {!clickUpdate && <p>Click to Update profile<button onClick={clickHandler}>Complete now</button></p>}
-            <button className={classes.button} onClick={verifyEmailHandler}>Verify Email</button>
+            {!emailVerify && <button className={classes.button} onClick={verifyEmailHandler}>Verify Email</button>}
             {clickUpdate && <form className={classes.form} onSubmit={submitHandler}>
                 <h1>Update Profile</h1>
                 <div className={classes.forminput}>
