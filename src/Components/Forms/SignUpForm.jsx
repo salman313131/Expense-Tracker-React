@@ -22,16 +22,16 @@ const SignUpForm=()=>{
             setTimeout(()=>setMessage(''),2000)
             return
         }
-        const data={
+        const data=JSON.stringify({
             email:emailValue,
             password:passwordValue,
             returnSecureToken: true
-        }
+        })
         const headers={
             'Content-Type':'application/json'
         }
         try {
-            const res = await axios.post('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyC-zo3yd0OzHqIhJeZs8KguG4hJI7-0_AM',data,{headers})
+            const res = await axios.post('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyC-zo3yd0OzHqIhJeZs8KguG4hJI7-0_AM',data,{headers})
             console.log(res)
         } catch (error) {
             setMessage('Something went wrong')
