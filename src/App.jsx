@@ -2,6 +2,7 @@ import SignUpForm from './Components/Forms/SignUpForm'
 import LoginForm from './Components/Forms/LoginForm'
 import UpdateProfile from './Components/Forms/UpdateProfile'
 import Layout from './Components/Layout/Layout'
+import DailyExpenses from './Components/Expenses/DailyExpenses'
 import { Switch, Route, Redirect } from 'react-router-dom'
 import AuthContext from './Store/authContext'
 import ForgotPasword from './Components/Forms/ForgotPassword'
@@ -23,6 +24,9 @@ function App() {
       <Route path='/forgot'>
         <ForgotPasword />
       </Route>
+      {authCtx.isLoggedIn && <Route path='/expense'>
+        <DailyExpenses />
+      </Route>}
       <Route path='*'>
         <Redirect to='/login'/>
       </Route>

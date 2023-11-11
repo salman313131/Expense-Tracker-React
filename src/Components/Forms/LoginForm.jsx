@@ -30,7 +30,7 @@ const LoginForm=()=>{
             const res = await axios.post('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyC-zo3yd0OzHqIhJeZs8KguG4hJI7-0_AM',data,{headers})
             authCtx.login(res.data.idToken)
             localStorage.setItem('token',res.data.idToken)
-            history.replace('/update')
+            history.replace('/expense')
         } catch (error) {
             setMessage(error.message)
             setTimeout(()=>setMessage(''),2000)
