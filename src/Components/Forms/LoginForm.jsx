@@ -2,11 +2,13 @@ import { useContext, useRef, useState } from "react"
 import classes from './LoginForm.module.css'
 import axios from "axios"
 import AuthContext from "../../Store/authContext"
+import { Link,useHistory } from "react-router-dom"
 const LoginForm=()=>{
     const [message,setMessage] = useState('')
     const email = useRef()
     const password = useRef()
     const authCtx = useContext(AuthContext)
+    const history = useHistory()
     const submitHandler= async (e)=>{
         e.preventDefault()
         const emailValue = email.current.value;
@@ -28,6 +30,7 @@ const LoginForm=()=>{
             const res = await axios.post('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyC-zo3yd0OzHqIhJeZs8KguG4hJI7-0_AM',data,{headers})
             console.log(res)
             authCtx.login(res.data.idToken)
+            history.replace('/update')
         } catch (error) {
             setMessage(error.message)
             setTimeout(()=>setMessage(''),2000)
@@ -46,7 +49,9 @@ const LoginForm=()=>{
                 <input type='password' ref={password}></input>
             </div>
             <button className={classes.button}>LogIn</button>
-            <p>New User, click to Sign Up</p>
+            <Link to='/signup'>
+                <p>New User, click to Sign Up</p>
+            </Link>
             {message && <p style={{color:'red'}}>{message}</p>}
         </form>
     )

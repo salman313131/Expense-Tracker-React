@@ -2,6 +2,7 @@ import { useRef } from "react"
 import { useState } from "react"
 import classes from "./SignUpForm.module.css"
 import axios from "axios"
+import { Link } from "react-router-dom"
 const SignUpForm=()=>{
     const [message,setMessage] = useState('')
     const email=useRef()
@@ -55,7 +56,9 @@ const SignUpForm=()=>{
                 <input type='password' ref={confirmPassword}></input>
             </div>
             <button className={classes.button}>SignUp</button>
-            <p>Already signUp, click to Login</p>
+            <Link to='/login'>
+                <p>Already signUp, click to Login</p>
+            </Link>
             {message && <p style={{color:'red'}}>{message}</p>}
         </form>
     )
