@@ -5,9 +5,13 @@ import { db } from "../../firebase"
 import { push, ref, get, remove } from 'firebase/database'
 import { useDispatch,useSelector } from "react-redux"
 import { expenseActions } from "../../Store/expense"
+import Papa from 'papaparse';
+import { saveAs } from 'file-saver';
 const DailyExpenses=()=>{
     const dispatch = useDispatch()
     const expenses = useSelector(state=>state.expense.expenses)
+    const authlocalId = useSelector(state=>state.auth.localId)
+    const isPremiumUser = useSelector(state=>state.theme.isPremium)
     const price=useRef()
     const description=useRef()
     const category=useRef()
@@ -19,7 +23,7 @@ const DailyExpenses=()=>{
             category:category.current.value
         }
         try {
-            const res = await push(ref(db,`/${authCtx.localId}`),data)
+            const res = await push(ref(db,`/${authlocalId}`),data)
             const dataStored={objId:res.key,...data}
             dispatch(expenseActions.add(dataStored))
         } catch (error) {
@@ -28,7 +32,7 @@ const DailyExpenses=()=>{
     }
     useEffect(()=>{
         async function getAlldata(){
-        const dbRef = ref(db, `/${authCtx.localId}`);
+        const dbRef = ref(db, `/${authlocalId}`);
             try {
                 const snapshot = await get(dbRef)
                 const dataToStored=[]
@@ -47,7 +51,7 @@ const DailyExpenses=()=>{
         getAlldata()
     },[])
     const deleteHandler=async(id)=>{
-        const dbref = ref(db,`/${authCtx.localId}/${id}`)
+        const dbref = ref(db,`/${authlocalId}/${id}`)
         try {
             await remove(dbref)
             dispatch(expenseActions.remove(id))
@@ -56,7 +60,7 @@ const DailyExpenses=()=>{
         }
     }
     const editHandler= async (id)=>{
-        const dbref = ref(db,`/${authCtx.localId}/${id}`)
+        const dbref = ref(db,`/${authlocalId}/${id}`)
         try {
             await remove(dbref)
             const editItem = expenses.find(item=>item.objId == id)
@@ -68,8 +72,25 @@ const DailyExpenses=()=>{
             console.log(error)
         }
     }
+    const downloadHandler=async()=>{
+        const dbRef = ref(db, `/${authlocalId}`);
+        try {
+            const res = await get(dbRef)
+            const data=[]
+                if (res.exists()) {
+                    res.forEach((childSnapshot) => {
+                        data.push(childSnapshot.val());  
+                });
+            }
+            const csvData = Papa.unparse(data);
+            const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
+            saveAs(blob, 'data.csv');
+        } catch (error) {
+            console.log(error)
+        }
+    }
     const expenseList = <ul>
-        {expenses.map(item=><DailyExpenseList key={item.objId} item={item} onDelete={deleteHandler.bind(null,item.objId)} onEdit={editHandler.bind(null,item.objId)}/>)}
+        {expenses.map(item=>(<DailyExpenseList key={item.objId} item={item} onDelete={deleteHandler.bind(null,item.objId)} onEdit={editHandler.bind(null,item.objId)}/>))}
     </ul>
     return(
         <>
@@ -94,6 +115,10 @@ const DailyExpenses=()=>{
             <button className={classes.button}>Add Expense</button>
         </form>
         {expenseList}
+        {isPremiumUser && <div>
+            <button>Toggle Theme</button>
+            <button onClick={downloadHandler}>Download CSV</button>
+        </div>}
         </>
     )
 }

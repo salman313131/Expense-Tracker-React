@@ -29,6 +29,7 @@
     cursor: pointer;
     transition: border-color 0.25s;
     padding: 0.6em 1.2em;
+    margin: 5px;
 }
 
 .button:hover {

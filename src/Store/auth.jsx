@@ -4,7 +4,7 @@ const token = localStorage.getItem('token')
 const localId = localStorage.getItem('local')
 const initialState = {
     token:token,
-    isLoggedIn:false,
+    isLoggedIn:!!token,
     localId:localId
 }
 
@@ -13,7 +13,7 @@ const authSlice = createSlice({
     initialState:initialState,
     reducers:{
         login(state,action){
-            state.token = action.payload
+            state.token = action.payload,
             state.isLoggedIn = true
         },
         logout(state){
