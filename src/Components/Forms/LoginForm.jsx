@@ -1,13 +1,14 @@
-import { useContext, useRef, useState } from "react"
+import { useRef, useState } from "react"
 import classes from './LoginForm.module.css'
 import axios from "axios"
-import AuthContext from "../../Store/authContext"
 import { Link,useHistory } from "react-router-dom"
+import { useDispatch } from "react-redux"
+import { authActions } from "../../Store/auth"
 const LoginForm=()=>{
+    const dispatch = useDispatch()
     const [message,setMessage] = useState('')
     const email = useRef()
     const password = useRef()
-    const authCtx = useContext(AuthContext)
     const history = useHistory()
     const submitHandler= async (e)=>{
         e.preventDefault()
@@ -29,8 +30,8 @@ const LoginForm=()=>{
         try {
             const res = await axios.post('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyC-zo3yd0OzHqIhJeZs8KguG4hJI7-0_AM',data,{headers})
             console.log(res)
-            authCtx.login(res.data.idToken)
-            authCtx.localIdSet(res.data.localId)
+            dispatch(authActions.login((res.data.idToken)))
+            dispatch(authActions.localIdSet(res.data.localId))
             localStorage.setItem('token',res.data.idToken)
             localStorage.setItem('local',res.data.localId)
             history.replace('/expense')

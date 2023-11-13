@@ -1,12 +1,13 @@
-import { useContext, useEffect, useRef, useState } from "react"
+import { useEffect, useRef } from "react"
 import DailyExpenseList from "./DailyExpenseList"
 import classes from "./DailyExpenses.module.css"
-import AuthContext from "../../Store/authContext"
 import { db } from "../../firebase"
 import { push, ref, get, remove } from 'firebase/database'
+import { useDispatch,useSelector } from "react-redux"
+import { expenseActions } from "../../Store/expense"
 const DailyExpenses=()=>{
-    const [expenses,setExpenses] = useState([])
-    const authCtx = useContext(AuthContext)
+    const dispatch = useDispatch()
+    const expenses = useSelector(state=>state.expense.expenses)
     const price=useRef()
     const description=useRef()
     const category=useRef()
@@ -19,10 +20,8 @@ const DailyExpenses=()=>{
         }
         try {
             const res = await push(ref(db,`/${authCtx.localId}`),data)
-            setExpenses(prevExpenses=>{
-                const dataStored={objId:res.key,...data}
-                return [dataStored,...prevExpenses]
-            })
+            const dataStored={objId:res.key,...data}
+            dispatch(expenseActions.add(dataStored))
         } catch (error) {
             console.log(error)
         }
@@ -37,7 +36,7 @@ const DailyExpenses=()=>{
                     snapshot.forEach((childSnapshot) => {
                         dataToStored.push({objId:childSnapshot.key,...childSnapshot.val()});  
                 });
-                setExpenses(dataToStored)
+                dispatch(expenseActions.addInitial(dataToStored))
                 } else {
                     console.log('No data available at the specified location.');
                 }
@@ -51,8 +50,7 @@ const DailyExpenses=()=>{
         const dbref = ref(db,`/${authCtx.localId}/${id}`)
         try {
             await remove(dbref)
-            const newList = expenses.filter(item=>item.objId != id)
-            setExpenses(newList)
+            dispatch(expenseActions.remove(id))
         } catch (error) {
             console.log('Error',error)
         }
@@ -62,11 +60,10 @@ const DailyExpenses=()=>{
         try {
             await remove(dbref)
             const editItem = expenses.find(item=>item.objId == id)
-            const newList = expenses.filter(item=>item.objId != id)
             price.current.value = editItem.price
             description.current.value = editItem.description
             category.current.value = editItem.category
-            setExpenses(newList)
+            dispatch(expenseActions.remove(id))
         } catch (error) {
             console.log(error)
         }

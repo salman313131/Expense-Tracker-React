@@ -1,13 +1,14 @@
 import classes from "./MainNavigation.module.css"
-import AuthContext from "../../Store/authContext"
-import { useContext } from "react"
+import { useSelector, useDispatch } from "react-redux"
 import { useHistory } from "react-router-dom"
+import { authActions } from "../../Store/auth"
 const MainNavigation=()=>{
+    const dispatch = useDispatch()
+    const isLoggedIn = useSelector(state=>state.auth.isLoggedIn)
     const history = useHistory()
-    const authCtx = useContext(AuthContext)
     const logoutHandler=()=>{
         localStorage.removeItem('token')
-        authCtx.logout()
+        dispatch(authActions.logout())
         history.replace('/login')
     }
     return(
@@ -17,7 +18,7 @@ const MainNavigation=()=>{
                 <ul className={classes.list}>
                     <li>Home</li>
                     <li>About</li>
-                    {authCtx.isLoggedIn && <button className={classes.button} onClick={logoutHandler}>logout</button>}
+                    {isLoggedIn && <button className={classes.button} onClick={logoutHandler}>logout</button>}
                 </ul>
             </div>
         </nav>

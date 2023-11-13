@@ -4,11 +4,10 @@ import UpdateProfile from './Components/Forms/UpdateProfile'
 import Layout from './Components/Layout/Layout'
 import DailyExpenses from './Components/Expenses/DailyExpenses'
 import { Switch, Route, Redirect } from 'react-router-dom'
-import AuthContext from './Store/authContext'
 import ForgotPasword from './Components/Forms/ForgotPassword'
-import { useContext } from 'react'
+import { useSelector } from 'react-redux'
 function App() {
-  const authCtx = useContext(AuthContext)
+  const isLoggedIn = useSelector((state)=>state.auth.isLoggedIn)
   return (
   <Layout>
     <Switch>
@@ -18,13 +17,13 @@ function App() {
       <Route path='/login'>
         <LoginForm />
       </Route>
-      {authCtx.isLoggedIn && <Route path='/update'>
+      {isLoggedIn && <Route path='/update'>
         <UpdateProfile />
       </Route>}
       <Route path='/forgot'>
         <ForgotPasword />
       </Route>
-      {authCtx.isLoggedIn && <Route path='/expense'>
+      {isLoggedIn && <Route path='/expense'>
         <DailyExpenses />
       </Route>}
       <Route path='*'>
