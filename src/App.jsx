@@ -14,18 +14,18 @@ function App() {
       <Route path='/signup'>
         <SignUpForm />
       </Route>
-      {!isLoggedIn && <Route path='/login'>
+      <Route path='/login'>
         <LoginForm />
-      </Route>}
+      </Route>
       {isLoggedIn && <Route path='/update'>
         <UpdateProfile />
       </Route>}
       <Route path='/forgot'>
         <ForgotPasword />
       </Route>
-      {isLoggedIn && <Route path='/expense'>
+      <Route path='/expense'>
         <DailyExpenses />
-      </Route>}
+      </Route>
       <Route path='*'>
         <Redirect to='/login'/>
       </Route>
