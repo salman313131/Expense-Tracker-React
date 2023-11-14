@@ -12,6 +12,7 @@ const MainNavigation=()=>{
     const history = useHistory()
     const logoutHandler=()=>{
         localStorage.removeItem('token')
+        localStorage.removeItem('local')
         dispatch(authActions.logout())
         history.replace('/login')
     }
@@ -26,7 +27,7 @@ const MainNavigation=()=>{
                     <li>Home</li>
                     <li>About</li>
                     {isLoggedIn && <button className={classes.button} onClick={logoutHandler}>logout</button>}
-                    {isPremium && !isPremiumUser && <button className={classes.button} style={{backgroundColor:'red'}} onClick={premiumHandler}>Premium</button>}
+                    {isLoggedIn && isPremium && !isPremiumUser && <button className={classes.button} style={{backgroundColor:'red'}} onClick={premiumHandler}>Premium</button>}
                 </ul>
             </div>
         </nav>

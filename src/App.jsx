@@ -14,9 +14,9 @@ function App() {
       <Route path='/signup'>
         <SignUpForm />
       </Route>
-      <Route path='/login'>
+      {!isLoggedIn && <Route path='/login'>
         <LoginForm />
-      </Route>
+      </Route>}
       {isLoggedIn && <Route path='/update'>
         <UpdateProfile />
       </Route>}
